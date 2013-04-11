@@ -1,0 +1,67 @@
+(function () {
+
+  function wrapError(model, options) {
+    var error = options.error;
+    options.error = function (resp) {
+      if (error) {
+        error(model, resp, options);
+      }
+      model.trigger('error', model, resp, options);
+    };
+  };
+
+  /**
+   * Partial fetch
+   *
+   * @param {Object} options
+   * @return {jqXHR}
+   */
+  Backbone.Collection.prototype.partialFetch = function partialFetch(options) {
+    var filtered_collection
+      , success
+      , collection = this;
+
+    options = options ? _.clone(options) : {};
+    success = options.success;
+
+    if (options.parse === undefined) {
+      options.parse = true;
+    }
+
+    if (options.filter === undefined) {
+      options.filter = {};
+    }
+
+    if (!options.url) {
+      if (_.isFunction(this.url)) {
+        options.url = this.url(options.filter);
+      } else {
+        throw Error('You must implement url as a function');
+      }
+    }
+
+    filtered_collection = this.filter(function (item) {
+      return _.all(_.keys(options.filter), function (key) {
+        return item.get(key) === options.filter[key];
+      });
+    });
+
+    options.success = function (resp) {
+      var method = options.reset ? 'reset' : 'set'
+        , to_remove = _.difference(_.pluck(filtered_collection, 'id'), _.pluck(resp, 'id'));
+
+      if (to_remove.length) {
+        collection.remove(to_remove, options);
+      }
+      collection[method](resp, _.extend(options, {remove: false}));
+      if (success) {
+        success(collection, resp, options);
+      }
+      collection.trigger('sync', collection, resp, options);
+    };
+
+    wrapError(this, options);
+
+    return this.sync('read', this, options);
+  };
+}());
