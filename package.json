@@ -3,6 +3,7 @@
   "description": "Partial fetcher for backbone",
   "version": "0.0.1",
   "author": "Pau ramon <masylum@gmail.com>",
+  "keywords": ["backbone", "ender", "teambox"],
   "repository": {"type": "git", "url": "git://github.com/masylum/Backbone.PartialFetch.git"},
   "devDependencies": {
     "backbone": "1.0.0",
@@ -10,5 +11,6 @@
     "underscore": "1.4.4",
     "gently": "*"
   },
-  "main": "./backbone.partial-fetch.js"
+  "main": "./backbone.partial-fetch.js",
+  "ender": "./backbone.virtual-collection-0.0.1.js"
 }
