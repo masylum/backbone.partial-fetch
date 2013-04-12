@@ -53,6 +53,7 @@
       if (to_remove.length) {
         collection.remove(to_remove, options);
       }
+      delete options.url;
       collection[method](resp, _.extend(options, {remove: false}));
       if (success) {
         success(collection, resp, options);

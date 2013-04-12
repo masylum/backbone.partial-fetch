@@ -80,6 +80,16 @@ describe('PartialFetch', function () {
       tasks.partialFetch();
     });
 
+    it('does not send the url all along', function() {
+      gently.expect(tasks, 'sync', function (method, context, options) {
+        options.success(tasks.models);
+      });
+      gently.expect(tasks, 'set', function (resp, options) {
+        assert.equal(options.url, undefined);
+      });
+      tasks.partialFetch();
+    });
+
     it('uses Backbones `reset` if option set', function() {
       gently.expect(tasks, 'sync', function (method, context, options) {
         assert.equal(method, 'read');
