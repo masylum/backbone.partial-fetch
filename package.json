@@ -3,6 +3,12 @@
   "description": "Partial fetcher for backbone",
   "version": "0.0.2",
   "author": "Pau ramon <masylum@gmail.com>",
+  "contributors": [
+    {
+      "name": "Enrico Stano",
+      "email": "enricostn@gmail.com"
+    }
+  ],
   "keywords": ["backbone", "ender", "teambox"],
   "repository": {"type": "git", "url": "git://github.com/masylum/Backbone.PartialFetch.git"},
   "devDependencies": {
