@@ -29,14 +29,14 @@ describe('PartialFetch', function () {
   });
 
   describe('url', function () {
-    it('throws if its not a function', function() {
+    it('throws if its not a function', function () {
       tasks.url = 'foo';
       assert.throws(function () {
         tasks.partialFetch();
       });
     });
 
-    it('gets the filter to the url', function() {
+    it('gets the filter to the url', function () {
       var filter = {archived: true};
 
       gently.expect(tasks, 'url', function (options) {
@@ -52,7 +52,7 @@ describe('PartialFetch', function () {
   });
 
   describe('filter', function () {
-    it('defaults to no filtering', function() {
+    it('defaults to no filtering', function () {
       gently.expect(tasks, 'url', function (options) {
         assert.deepEqual(options, {});
       });
@@ -63,10 +63,32 @@ describe('PartialFetch', function () {
       });
       tasks.partialFetch();
     });
+
+    it('uses a custom filter function if given', function () {
+      var filter = function (item) {
+        return item.get('archived') === false;
+      }
+        , resp = [{id: 0, archived: false}];
+
+      gently.expect(tasks, 'sync', function (method, context, options) {
+        assert.equal(method, 'read');
+        assert.equal(context, tasks);
+        assert.deepEqual(options.filter, filter);
+        options.success(resp);
+      });
+      gently.expect(tasks, 'remove', function (to_remove, options) {
+        assert.deepEqual(to_remove, [1]);
+      });
+      gently.expect(tasks, 'set', function (resp, options) {
+        assert.deepEqual(resp, resp);
+        assert.equal(options.remove, false);
+      });
+      tasks.partialFetch({filter: filter});
+    });
   });
 
   describe('smart updating', function () {
-    it('uses Backbones `set` with `remove` set to false', function() {
+    it('uses Backbones `set` with `remove` set to false', function () {
       gently.expect(tasks, 'sync', function (method, context, options) {
         assert.equal(method, 'read');
         assert.equal(context, tasks);
@@ -80,7 +102,7 @@ describe('PartialFetch', function () {
       tasks.partialFetch();
     });
 
-    it('does not send the url all along', function() {
+    it('does not send the url all along', function () {
       gently.expect(tasks, 'sync', function (method, context, options) {
         options.success(tasks.models);
       });
@@ -90,7 +112,7 @@ describe('PartialFetch', function () {
       tasks.partialFetch();
     });
 
-    it('uses Backbones `reset` if option set', function() {
+    it('uses Backbones `reset` if option set', function () {
       gently.expect(tasks, 'sync', function (method, context, options) {
         assert.equal(method, 'read');
         assert.equal(context, tasks);
@@ -104,7 +126,7 @@ describe('PartialFetch', function () {
       tasks.partialFetch({reset: true});
     });
 
-    it('calculates wich data has to be removed', function() {
+    it('calculates wich data has to be removed', function () {
       var filter = {archived: false}
         , resp = [{id: 0, archived: false}];
 
