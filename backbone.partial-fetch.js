@@ -32,6 +32,16 @@
       options.filter = {};
     }
 
+    if (_.isFunction(options.filter)) {
+      filtered_collection = this.filter(options.filter);
+    } else {
+      filtered_collection = this.filter(function (item) {
+        return _.all(_.keys(options.filter), function (key) {
+          return item.get(key) === options.filter[key];
+        });
+      });
+    }
+
     if (!options.url) {
       if (_.isFunction(this.url)) {
         options.url = this.url(options.filter);
@@ -39,12 +49,6 @@
         throw Error('You must implement url as a function');
       }
     }
-
-    filtered_collection = this.filter(function (item) {
-      return _.all(_.keys(options.filter), function (key) {
-        return item.get(key) === options.filter[key];
-      });
-    });
 
     options.success = function (resp) {
       var method = options.reset ? 'reset' : 'set'

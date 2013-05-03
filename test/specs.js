@@ -63,10 +63,32 @@ describe('PartialFetch', function () {
       });
       tasks.partialFetch();
     });
+
+    it('uses a custom filter function if given', function () {
+      var filter = function (item) {
+        return item.get('archived') === false;
+      }
+        , resp = [{id: 0, archived: false}];
+
+      gently.expect(tasks, 'sync', function (method, context, options) {
+        assert.equal(method, 'read');
+        assert.equal(context, tasks);
+        assert.deepEqual(options.filter, filter);
+        options.success(resp);
+      });
+      gently.expect(tasks, 'remove', function (to_remove, options) {
+        assert.deepEqual(to_remove, [1]);
+      });
+      gently.expect(tasks, 'set', function (resp, options) {
+        assert.deepEqual(resp, resp);
+        assert.equal(options.remove, false);
+      });
+      tasks.partialFetch({filter: filter});
+    });
   });
 
   describe('smart updating', function () {
-    it('uses Backbones `set` with `remove` set to false', function() {
+    it('uses Backbones `set` with `remove` set to false', function () {
       gently.expect(tasks, 'sync', function (method, context, options) {
         assert.equal(method, 'read');
         assert.equal(context, tasks);
