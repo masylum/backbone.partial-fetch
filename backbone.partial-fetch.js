@@ -33,7 +33,7 @@
     }
 
     if (_.isFunction(options.filter)) {
-      filtered_collection = this.filter(options.filter);
+      filtered_collection = this.filter(options.filter, options.context);
     } else {
       filtered_collection = this.filter(function (item) {
         return _.all(_.keys(options.filter), function (key) {
