@@ -52,7 +52,8 @@
 
     options.success = function (resp) {
       var method = options.reset ? 'reset' : 'set'
-        , to_remove = _.difference(_.pluck(filtered_collection, 'id'), _.pluck(resp, 'id'));
+        , resp_ids = _.isArray(resp) ? _.pluck(resp, 'id') : [resp.id]
+        , to_remove = _.difference(_.pluck(filtered_collection, 'id'), resp_ids);
 
       if (to_remove.length) {
         collection.remove(to_remove, options);
