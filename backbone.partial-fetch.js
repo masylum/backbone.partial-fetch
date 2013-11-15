@@ -1,3 +1,10 @@
+/*
+ * Backbone.partial-fetch - Allows you to do smart partial fetching
+ * Copyright (c) 2012 Pau Ramon
+ * MIT Licensed
+ * @version 0.0.4
+ */
+
 (function () {
 
   function wrapError(model, options) {
@@ -8,7 +15,7 @@
       }
       model.trigger('error', model, resp, options);
     };
-  };
+  }
 
   /**
    * Partial fetch

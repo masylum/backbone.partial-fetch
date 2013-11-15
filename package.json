@@ -1,12 +1,16 @@
 {
   "name": "backbone.partial-fetch",
   "description": "Partial fetcher for backbone",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Pau ramon <masylum@gmail.com>",
   "contributors": [
     {
       "name": "Enrico Stano",
       "email": "enricostn@gmail.com"
+    }
+  , {
+      "name": "Maxim Colls",
+      "email": "collsmaxim@gmail.com"
     }
   ],
   "keywords": ["backbone", "ender", "teambox"],
